@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\UserScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -40,4 +41,9 @@ class Income extends Model
 	{
 		return $this->belongsTo(Wallet::class);
 	}
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new UserScope);
+    }
 }

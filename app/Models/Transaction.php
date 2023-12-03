@@ -6,34 +6,12 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\UserScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-/**
- * Class Transaction
- * 
- * @property int $id
- * @property string $name
- * @property Carbon $date
- * @property string $type
- * @property float $amount
- * @property string $currency
- * @property string $description
- * @property int $wallet_id
- * @property int $iou_id
- * @property int $category_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property string|null $deleted_at
- * 
- * @property Category $category
- * @property Iou $iou
- * @property Wallet $wallet
- *
- * @package App\Models
- */
 class Transaction extends Model
 {
 	use SoftDeletes;
@@ -73,4 +51,9 @@ class Transaction extends Model
 	{
 		return $this->belongsTo(Wallet::class);
 	}
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new UserScope);
+    }
 }

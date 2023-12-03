@@ -6,25 +6,13 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\UserScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-/**
- * Class Iou
- * 
- * @property int $id
- * @property string $name
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property string|null $deleted_at
- * 
- * @property Collection|Transaction[] $transactions
- *
- * @package App\Models
- */
 class Iou extends Model
 {
 	use SoftDeletes;
@@ -38,4 +26,9 @@ class Iou extends Model
 	{
 		return $this->hasMany(Transaction::class);
 	}
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new UserScope);
+    }
 }
