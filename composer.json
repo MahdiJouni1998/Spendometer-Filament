@@ -18,9 +18,11 @@
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^3.0",
         "livewire/volt": "^1.0",
+        "monicahq/laravel-cloudflare": "^3.5",
         "owenvoke/blade-fontawesome": "^2.5"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.9",
         "barryvdh/laravel-ide-helper": "^2.13",
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",

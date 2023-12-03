@@ -6,9 +6,29 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use App\Observers\CreateForUserObserver;
+use App\Models\Iou;
+use App\Models\Wallet;
+use App\Models\Income;
+use App\Models\Category;
+use App\Models\Transaction;
+use App\Models\IncomeSource;
 
 class EventServiceProvider extends ServiceProvider
 {
+    /**
+     * The model observers for your application.
+     *
+     * @var array
+     */
+    protected $observers = [
+        Iou::class => [CreateForUserObserver::class],
+        Income::class => [CreateForUserObserver::class],
+        Wallet::class => [CreateForUserObserver::class],
+        Category::class => [CreateForUserObserver::class],
+        Transaction::class => [CreateForUserObserver::class],
+        IncomeSource::class => [CreateForUserObserver::class],
+    ];
     /**
      * The event to listener mappings for the application.
      *
