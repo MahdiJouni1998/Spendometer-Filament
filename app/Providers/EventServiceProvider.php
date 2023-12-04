@@ -13,6 +13,7 @@ use App\Models\Income;
 use App\Models\Category;
 use App\Models\Transaction;
 use App\Models\IncomeSource;
+use App\Models\WalletsTransaction;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -28,6 +29,7 @@ class EventServiceProvider extends ServiceProvider
         Category::class => [CreateForUserObserver::class],
         Transaction::class => [CreateForUserObserver::class],
         IncomeSource::class => [CreateForUserObserver::class],
+        WalletsTransaction::class => [CreateForUserObserver::class],
     ];
     /**
      * The event to listener mappings for the application.
