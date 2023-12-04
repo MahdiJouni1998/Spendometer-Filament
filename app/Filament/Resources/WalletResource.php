@@ -46,6 +46,17 @@ class WalletResource extends Resource
                                     ->default(0)
                                     ->suffix('ل.ل.')
                                     ->numeric(),
+                                Forms\Components\TextInput::make('balance_lbp')
+                                    ->currencyMask()
+                                    ->label('Euro')
+                                    ->required()
+                                    ->default(0)
+                                    ->suffix('€')
+                                    ->numeric(),
+                            ])
+                            ->columns([
+                                'lg' => 3,
+                                'sm' => 1
                             ])
                     ])
             ]);
@@ -59,11 +70,15 @@ class WalletResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('balance_usd')
                     ->label('USD balance')
-                    ->formatStateUsing(fn (string $state): string => format_number($state) . "$")
+                    ->money('usd')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('balance_lbp')
                     ->label('LBP balance')
-                    ->formatStateUsing(fn (string $state): string => format_number($state) . "ل.ل.")
+                    ->money('lbp')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('balance_eur')
+                    ->label('Euro balance')
+                    ->money('eur')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

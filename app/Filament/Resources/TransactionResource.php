@@ -38,6 +38,7 @@ class TransactionResource extends Resource
                             ->native(false)
                             ->required(),
                         Forms\Components\Select::make('iou_id')
+                            ->label('Third party')
                             ->relationship('iou', 'name')
                             ->native(false)
                             ->createOptionForm([
@@ -56,6 +57,7 @@ class TransactionResource extends Resource
                         Forms\Components\DatePicker::make('date')
                             ->required(),
                         Forms\Components\Select::make('type')
+                            ->default('out')
                             ->options([
                                 'in' => 'Into the wallet',
                                 'out' => 'Out of the wallet',
@@ -68,14 +70,12 @@ class TransactionResource extends Resource
                                         'lg' => 2,
                                         'sm' => 2
                                     ])
+                                    ->currencyMask()
                                     ->required()
                                     ->numeric(),
                                 Forms\Components\Select::make('currency')
                                     ->native(false)
-                                    ->options([
-                                        'usd' => '$',
-                                        'lbp' => 'ل.ل.'
-                                    ])
+                                    ->options(config('global.currencies'))
                                     ->required()
                                     ->columnSpan([
                                         'lg' => 2,
@@ -116,8 +116,7 @@ class TransactionResource extends Resource
                 Tables\Columns\TextColumn::make('type')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('amount')
-                    ->formatStateUsing(fn (Model $record, string $state): string => format_number($state) .
-                        config('global.currencies')[$record->currency])
+                    ->money(fn (Model $record) => $record->currency)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

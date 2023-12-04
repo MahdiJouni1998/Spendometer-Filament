@@ -37,13 +37,11 @@ class IncomeSourceResource extends Resource
                                         'lg' => 2,
                                         'sm' => 2
                                     ])
+                                    ->currencyMask()
                                     ->numeric(),
                                 Forms\Components\Select::make('currency')
                                     ->native(false)
-                                    ->options([
-                                        'usd' => '$',
-                                        'lbp' => 'ل.ل.'
-                                    ])
+                                    ->options(config('global.currencies'))
                                     ->columnSpan([
                                         'lg' => 2,
                                         'sm' => 1
@@ -67,8 +65,7 @@ class IncomeSourceResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('amount')
-                    ->formatStateUsing(fn (Model $record, string $state): string => format_number($state) .
-                        config('global.currencies')[$record->currency])
+                    ->money(fn (Model $record) => $record->currency)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
