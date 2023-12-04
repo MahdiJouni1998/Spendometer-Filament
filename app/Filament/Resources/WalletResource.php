@@ -46,7 +46,7 @@ class WalletResource extends Resource
                                     ->default(0)
                                     ->suffix('ل.ل.')
                                     ->numeric(),
-                                Forms\Components\TextInput::make('balance_lbp')
+                                Forms\Components\TextInput::make('balance_eur')
                                     ->currencyMask()
                                     ->label('Euro')
                                     ->required()
