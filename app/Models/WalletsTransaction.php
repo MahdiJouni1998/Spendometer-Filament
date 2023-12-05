@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\UserScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -52,5 +53,10 @@ class WalletsTransaction extends Model
     public function walletFrom(): BelongsTo
     {
         return $this->belongsTo(Wallet::class, 'wallet_from');
+    }
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new UserScope);
     }
 }
