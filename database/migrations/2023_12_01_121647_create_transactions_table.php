@@ -17,7 +17,7 @@ return new class extends Migration
             $table->date('date');
             $table->string('type', 20);
             $table->decimal('amount', 22);
-            $table->string('currency', 3)->default('usd');
+            $table->string('currency', 3)->default('lbp');
             $table->text('description');
             $table->timestamps();
             $table->softDeletes();

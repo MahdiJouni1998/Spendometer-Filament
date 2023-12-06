@@ -81,7 +81,7 @@ class TransactionResource extends Resource
                                         'lg' => 2,
                                         'sm' => 1
                                     ])
-                                    ->default('usd'),
+                                    ->default('lbp'),
                             ])
                             ->columns([
                                 'lg' => 4,
