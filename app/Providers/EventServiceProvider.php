@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Balance;
+use App\Models\Currency;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -26,7 +28,9 @@ class EventServiceProvider extends ServiceProvider
         Iou::class => [CreateForUserObserver::class],
         Income::class => [CreateForUserObserver::class],
         Wallet::class => [CreateForUserObserver::class],
+        Balance::class => [CreateForUserObserver::class],
         Category::class => [CreateForUserObserver::class],
+        Currency::class => [CreateForUserObserver::class],
         Transaction::class => [CreateForUserObserver::class],
         IncomeSource::class => [CreateForUserObserver::class],
         WalletsTransaction::class => [CreateForUserObserver::class],
