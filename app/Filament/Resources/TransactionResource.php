@@ -110,6 +110,7 @@ class TransactionResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('date', 'desc')
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
