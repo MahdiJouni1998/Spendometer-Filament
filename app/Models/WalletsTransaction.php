@@ -19,44 +19,67 @@ class WalletsTransaction extends Model
 
 	protected $casts = [
 		'date' => 'datetime',
-		'wallet_from' => 'int',
+		'balance_from' => 'int',
 		'amount_from' => 'float',
-		'wallet_to' => 'int',
+		'balance_to' => 'int',
 		'amount_to' => 'float',
 		'user_id' => 'int'
 	];
+
+    protected $appends = [
+        'currency_from',
+        'currency_to',
+    ];
 
 	protected $fillable = [
 		'name',
 		'date',
 		'type',
-		'wallet_from',
+		'balance_from',
 		'amount_from',
-		'currency_from',
-		'wallet_to',
+		'balance_to',
 		'amount_to',
-		'currency_to',
 		'description',
 		'user_id'
 	];
 
-	public function user(): BelongsTo
-	{
-		return $this->belongsTo(User::class);
-	}
-
-    public function walletTo(): BelongsTo
+    public function getCurrencyFromAttribute()
     {
-        return $this->belongsTo(Wallet::class, 'wallet_to');
+        return $this->balanceFrom()->first()->currency;
     }
 
-    public function walletFrom(): BelongsTo
+    public function getCurrencyToAttribute()
     {
-        return $this->belongsTo(Wallet::class, 'wallet_from');
+        return $this->balanceTo()->first()->currency;
     }
 
     protected static function booted(): void
     {
         static::addGlobalScope(new UserScope);
     }
+
+	public function user(): BelongsTo
+	{
+		return $this->belongsTo(User::class);
+	}
+
+    public function balanceFrom(): BelongsTo
+    {
+        return $this->belongsTo(Balance::class, 'balance_from');
+    }
+
+//    public function walletFrom(): BelongsTo
+//    {
+//        return $this->balanceFrom()->get()->wallet();
+//    }
+
+    public function balanceTo(): BelongsTo
+    {
+        return $this->belongsTo(Balance::class, 'balance_to');
+    }
+
+//    public function walletTo(): BelongsTo
+//    {
+//        return $this->balanceTo()->get()->wallet();
+//    }
 }

@@ -27,37 +27,17 @@ class IncomeResource extends Resource
             ->schema([
                 Forms\Components\Section::make()
                     ->schema([
-                        Forms\Components\Select::make('wallet_id')
-                            ->relationship('wallet', 'name')
+                        Forms\Components\Select::make('balance_id')
+                            ->relationship('balance', 'name')
                             ->native(false)
                             ->required(),
                         Forms\Components\Select::make('income_source_id')
                             ->relationship('income_source', 'name')
                             ->native(false)
                             ->required(),
-                        Forms\Components\Grid::make()
-                            ->schema([
-                                Forms\Components\TextInput::make('amount')
-                                    ->columnSpan([
-                                        'lg' => 2,
-                                        'sm' => 2
-                                    ])
-                                    ->currencyMask()
-                                    ->numeric(),
-                                Forms\Components\Select::make('currency')
-                                    ->native(false)
-                                    ->options(config('global.currencies'))
-                                    ->columnSpan([
-                                        'lg' => 2,
-                                        'sm' => 1
-                                    ])
-                                    ->default('usd'),
-                            ])
-                            ->columns([
-                                'lg' => 4,
-                                'sm' => 3
-                            ])
-                            ->columnSpan(1),
+                        Forms\Components\TextInput::make('amount')
+                            ->currencyMask()
+                            ->numeric(),
                         Forms\Components\DatePicker::make('date_received')
                             ->required(),
                     ])
@@ -69,7 +49,7 @@ class IncomeResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('wallet.name')
+                Tables\Columns\TextColumn::make('balance.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('income_source.name')

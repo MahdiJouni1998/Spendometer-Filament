@@ -20,22 +20,35 @@ class Transaction extends Model
 	protected $casts = [
 		'date' => 'datetime',
 		'amount' => 'float',
-		'wallet_id' => 'int',
+        'balance_id' => 'int',
 		'iou_id' => 'int',
 		'category_id' => 'int'
 	];
+
+    protected $appends = [
+        'currency'
+    ];
 
 	protected $fillable = [
 		'name',
 		'date',
 		'type',
 		'amount',
-		'currency',
 		'description',
-		'wallet_id',
+        'balance_id',
 		'iou_id',
 		'category_id'
 	];
+
+    public function getCurrencyAttribute()
+    {
+        return $this->balance()->first()->currency;
+    }
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new UserScope);
+    }
 
 	public function category(): BelongsTo
 	{
@@ -47,13 +60,12 @@ class Transaction extends Model
 		return $this->belongsTo(Iou::class);
 	}
 
-	public function wallet(): BelongsTo
-	{
-		return $this->belongsTo(Wallet::class);
-	}
-
-    protected static function booted(): void
+    public function balance(): BelongsTo
     {
-        static::addGlobalScope(new UserScope);
+        return $this->belongsTo(Balance::class);
     }
+//    public function wallet(): BelongsTo
+//    {
+//        return $this->balance()->get()->wallet();
+//    }
 }

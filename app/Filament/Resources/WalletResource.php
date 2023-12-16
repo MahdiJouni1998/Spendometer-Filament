@@ -6,7 +6,9 @@ use App\Filament\Resources\WalletResource\Pages;
 use App\Filament\Resources\WalletResource\RelationManagers;
 use App\Models\Wallet;
 use Filament\Forms;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -23,76 +25,96 @@ class WalletResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $currencies = currencies();
         return $form
             ->schema([
                 Forms\Components\Section::make()
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->required()
+                            ->columnSpanFull()
                             ->maxLength(255),
-                        Forms\Components\Fieldset::make('Balances')
+                        Forms\Components\Repeater::make('Balances')
+                            ->relationship('balances')
                             ->schema([
-                                Forms\Components\TextInput::make('balance_usd')
-                                    ->label('USD')
-                                    ->currencyMask()
+                                Forms\Components\TextInput::make('name')
                                     ->required()
-                                    ->default(0)
-                                    ->suffix('$')
-                                    ->numeric(),
-                                Forms\Components\TextInput::make('balance_lbp')
-                                    ->currencyMask()
-                                    ->label('LBP')
-                                    ->required()
-                                    ->default(0)
-                                    ->suffix('ل.ل.')
-                                    ->numeric(),
-                                Forms\Components\TextInput::make('balance_eur')
-                                    ->currencyMask()
-                                    ->label('Euro')
-                                    ->required()
-                                    ->default(0)
-                                    ->suffix('€')
-                                    ->numeric(),
+                                    ->maxLength(255),
+                                Forms\Components\Grid::make()
+                                    ->schema([
+                                        Forms\Components\TextInput::make('amount')
+                                            ->currencyMask()
+                                            ->required()
+                                            ->default(0)
+                                            ->live()
+                                            ->columnSpan([
+                                                'lg' => 2,
+                                                'sm' => 1
+                                            ])
+                                            ->numeric(),
+                                        Forms\Components\Select::make('currency')
+                                            ->native(false)
+                                            ->required()
+                                            ->live()
+                                            ->columnSpan([
+                                                'lg' => 2,
+                                                'sm' => 1
+                                            ])
+                                            ->options($currencies),
+                                    ])
+                                    ->columns([
+                                        'lg' => 4,
+                                        'sm' => 2
+                                    ])
+                                    ->columnSpan(1)
                             ])
-                            ->columns([
-                                'lg' => 3,
-                                'sm' => 1
-                            ])
+                            ->minItems(1)
+                            ->itemLabel(fn (array $state): ?string =>  $state['name'] ?? "New balance")
+                            ->deleteAction(fn (Action $action) => $action->requiresConfirmation())
+                            ->columns(2)
+                            ->columnSpanFull()
                     ])
+                    ->columns(2)
             ]);
     }
 
     public static function table(Table $table): Table
     {
+        $columns = [];
+        $columns[] = Tables\Columns\TextColumn::make('name')->searchable();
+        $currencies = currencyNames();
+        foreach ($currencies as $currency) {
+            $columns[] = Tables\Columns\TextColumn::make('Balance ' . $currency)
+                ->label('Total balance ' . strtoupper($currency))
+                ->getStateUsing(function (Model $record) use ($currency) {
+                    $amount = 0;
+                    $balances = $record->balances()
+                        ->where('currency', $currency)
+                        ->get();
+                    foreach ($balances as $balance) {
+                        $amount += $balance->amount;
+                    }
+                    $state = $amount != 0 ? (string) $amount : "";
+//                    dd($record);
+                    return $state;
+                })
+                ->money($currency)
+                ->searchable();
+        }
+        $columns[] = Tables\Columns\TextColumn::make('created_at')
+            ->dateTime()
+            ->sortable()
+            ->toggleable(isToggledHiddenByDefault: true);
+        $columns[] = Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true);
+        $columns[] = Tables\Columns\TextColumn::make('deleted_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true);
         return $table
-            ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('balance_usd')
-                    ->label('USD balance')
-                    ->money('usd')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('balance_lbp')
-                    ->label('LBP balance')
-                    ->money('lbp')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('balance_eur')
-                    ->label('Euro balance')
-                    ->money('eur')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('deleted_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
+            ->columns($columns)
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])

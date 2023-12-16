@@ -41,7 +41,7 @@ class IncomeSourceResource extends Resource
                                     ->numeric(),
                                 Forms\Components\Select::make('currency')
                                     ->native(false)
-                                    ->options(config('global.currencies'))
+                                    ->options(currencies())
                                     ->columnSpan([
                                         'lg' => 2,
                                         'sm' => 1

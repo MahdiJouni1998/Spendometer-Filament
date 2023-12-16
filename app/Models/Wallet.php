@@ -18,24 +18,22 @@ class Wallet extends Model
 	use SoftDeletes;
 	protected $table = 'wallets';
 
-	protected $casts = [
-		'balance_usd' => 'float',
-		'balance_lbp' => 'int'
-	];
-
 	protected $fillable = [
 		'name',
-		'balance_usd',
-		'balance_lbp'
 	];
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new UserScope);
+    }
 
 	public function transactions(): HasMany
 	{
 		return $this->hasMany(Transaction::class);
 	}
 
-    protected static function booted(): void
+    public function balances(): HasMany
     {
-        static::addGlobalScope(new UserScope);
+        return $this->hasMany(Balance::class);
     }
 }

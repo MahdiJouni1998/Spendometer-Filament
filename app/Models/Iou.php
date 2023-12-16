@@ -22,13 +22,13 @@ class Iou extends Model
 		'name'
 	];
 
-	public function transactions(): HasMany
-	{
-		return $this->hasMany(Transaction::class);
-	}
-
     protected static function booted(): void
     {
         static::addGlobalScope(new UserScope);
     }
+
+	public function transactions(): HasMany
+	{
+		return $this->hasMany(Transaction::class);
+	}
 }

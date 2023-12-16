@@ -42,73 +42,29 @@ class WalletsTransactionResource extends Resource
                             ->required(),
                         Forms\Components\Fieldset::make("From")
                             ->schema([
-                                Forms\Components\Select::make('wallet_from')
-                                    ->label('Wallet')
+                                Forms\Components\Select::make('balance_from')
+                                    ->label('Balance')
                                     ->native(false)
-                                    ->relationship('walletFrom', 'name')
+                                    ->relationship('balanceFrom', 'name')
                                     ->required(),
-                                Forms\Components\Grid::make()
-                                    ->schema([
-                                        Forms\Components\TextInput::make('amount_from')
-                                            ->label('Amount')
-                                            ->columnSpan([
-                                                'lg' => 2,
-                                                'sm' => 2
-                                            ])
-                                            ->currencyMask()
-                                            ->required()
-                                            ->numeric(),
-                                        Forms\Components\Select::make('currency_from')
-                                            ->label('Currency')
-                                            ->native(false)
-                                            ->options(config('global.currencies'))
-                                            ->required()
-                                            ->columnSpan([
-                                                'lg' => 2,
-                                                'sm' => 1
-                                            ])
-                                            ->default('usd'),
-                                    ])
-                                    ->columns([
-                                        'lg' => 4,
-                                        'sm' => 3
-                                    ])
-                                    ->columnSpan(1),
+                                Forms\Components\TextInput::make('amount_from')
+                                    ->label('Amount')
+                                    ->currencyMask()
+                                    ->required()
+                                    ->numeric(),
                             ]),
                         Forms\Components\Fieldset::make("To")
                             ->schema([
-                                Forms\Components\Select::make('wallet_to')
-                                    ->label('Wallet')
+                                Forms\Components\Select::make('balance_to')
+                                    ->label('Balance')
                                     ->native(false)
-                                    ->relationship('walletTo', 'name')
+                                    ->relationship('balanceTo', 'name')
                                     ->required(),
-                                Forms\Components\Grid::make()
-                                    ->schema([
-                                        Forms\Components\TextInput::make('amount_to')
-                                            ->label('Amount')
-                                            ->columnSpan([
-                                                'lg' => 2,
-                                                'sm' => 2
-                                            ])
-                                            ->currencyMask()
-                                            ->required()
-                                            ->numeric(),
-                                        Forms\Components\Select::make('currency_to')
-                                            ->label('Currency')
-                                            ->native(false)
-                                            ->options(config('global.currencies'))
-                                            ->required()
-                                            ->columnSpan([
-                                                'lg' => 2,
-                                                'sm' => 1
-                                            ])
-                                            ->default('usd'),
-                                    ])
-                                    ->columns([
-                                        'lg' => 4,
-                                        'sm' => 3
-                                    ])
-                                    ->columnSpan(1),
+                                Forms\Components\TextInput::make('amount_to')
+                                    ->label('Amount')
+                                    ->currencyMask()
+                                    ->required()
+                                    ->numeric(),
                             ]),
                         Forms\Components\Textarea::make('description')
                             ->maxLength(65535)
@@ -128,14 +84,14 @@ class WalletsTransactionResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('walletFrom.name')
+                Tables\Columns\TextColumn::make('balanceFrom.name')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('walletTo.name')
+                Tables\Columns\TextColumn::make('balanceTo.name')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('amount_from')
-                    ->money(fn (Model $record) => $record->currency_to)
+                    ->money(fn (Model $record) => $record->currency_from)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('amount_to')
                     ->money(fn (Model $record) => $record->currency_to)
@@ -166,8 +122,7 @@ class WalletsTransactionResource extends Resource
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ])
-            ->defaultSort('date', 'desc');
+            ]);
     }
 
     public static function getRelations(): array

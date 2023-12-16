@@ -20,30 +20,43 @@ class Income extends Model
 	protected $casts = [
 		'amount' => 'float',
 		'date_received' => 'datetime',
-		'wallet_id' => 'int',
+		'balance_id' => 'int',
 		'income_source_id' => 'int'
 	];
 
+    protected $appends = [
+        'currency'
+    ];
+
 	protected $fillable = [
 		'amount',
-		'currency',
 		'date_received',
-		'wallet_id',
+		'balance_id',
 		'income_source_id'
 	];
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new UserScope);
+    }
 
 	public function income_source(): BelongsTo
 	{
 		return $this->belongsTo(IncomeSource::class);
 	}
 
-	public function wallet(): BelongsTo
-	{
-		return $this->belongsTo(Wallet::class);
-	}
+//	public function wallet(): BelongsTo
+//	{
+//		return $this->belongsTo(Wallet::class);
+//	}
 
-    protected static function booted(): void
+    public function balance(): BelongsTo
     {
-        static::addGlobalScope(new UserScope);
+        return $this->belongsTo(Balance::class);
+    }
+
+    public function getCurrencyAttribute()
+    {
+        return $this->balance()->first()->currency;
     }
 }
