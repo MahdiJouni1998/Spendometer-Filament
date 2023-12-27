@@ -10,6 +10,7 @@ use App\Models\Scopes\UserScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Transaction extends Model
@@ -64,8 +65,9 @@ class Transaction extends Model
     {
         return $this->belongsTo(Balance::class);
     }
-//    public function wallet(): BelongsTo
-//    {
-//        return $this->balance()->get()->wallet();
-//    }
+
+    public function cashBacks(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(CashBack::class);
+    }
 }
