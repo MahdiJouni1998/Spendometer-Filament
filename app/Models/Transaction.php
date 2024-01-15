@@ -21,8 +21,6 @@ class Transaction extends Model
 
 	protected $casts = [
 		'date' => 'datetime',
-		'amount' => 'float',
-        'balance_id' => 'int',
 		'iou_id' => 'int',
 		'category_id' => 'int'
 	];
@@ -35,16 +33,14 @@ class Transaction extends Model
 		'name',
 		'date',
 		'type',
-		'amount',
 		'description',
-        'balance_id',
 		'iou_id',
-		'category_id'
+		'category_id',
 	];
 
     public function getCurrencyAttribute()
     {
-        return $this->balance()->first()->currency;
+        return null;
     }
 
     protected static function booted(): void
@@ -70,5 +66,10 @@ class Transaction extends Model
     public function cashBacks(): HasMany
     {
         return $this->hasMany(CashBack::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(TransactionPayment::class);
     }
 }

@@ -35,10 +35,6 @@ class TransactionResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->columnSpanFull(),
-                        Forms\Components\Select::make('balance_id')
-                            ->relationship('balance', 'name')
-                            ->native(false)
-                            ->required(),
                         Forms\Components\Select::make('iou_id')
                             ->label('Third party')
                             ->relationship('iou', 'name')
@@ -65,10 +61,32 @@ class TransactionResource extends Resource
                                 'out' => 'Out of the wallet',
                             ])
                             ->required(),
-                        Forms\Components\TextInput::make('amount')
-                            ->currencyMask()
+                        Forms\Components\Repeater::make('Payments')
                             ->required()
-                            ->numeric(),
+                            ->minItems(1)
+                            ->schema([
+                                Forms\Components\Select::make('balance_id')
+                                    ->relationship('balance', 'name')
+                                    ->native(false)
+                                    ->required(),
+                                Forms\Components\TextInput::make('amount')
+                                    ->currencyMask()
+                                    ->required()
+                                    ->numeric()
+                            ])
+                            ->columnSpanFull()
+                            ->columns(2)
+                            ->relationship('payments')
+                            ->mutateRelationshipDataBeforeCreateUsing(function (array $data, Get $get) {
+                                $type = $get('type');
+                                $amount = $data['amount'];
+                                if($type == "out")
+                                    $amount = -$amount;
+                                $balance = Balance::findOrFail($data['balance_id']);
+                                $balance->amount += $amount;
+                                $balance->save();
+                                return $data;
+                            }),
                         Forms\Components\Textarea::make('description')
                             ->maxLength(65535)
                             ->columnSpanFull(),
@@ -80,9 +98,6 @@ class TransactionResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('balance.name')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('iou.name')
                     ->numeric()
                     ->sortable(),
@@ -96,9 +111,6 @@ class TransactionResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('amount')
-                    ->money(fn (Model $record) => $record->currency)
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
