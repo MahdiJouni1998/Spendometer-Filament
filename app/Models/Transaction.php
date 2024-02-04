@@ -47,8 +47,9 @@ class Transaction extends Model
     public function getAmountAttribute()
     {
         $amount = 0;
-        $payments = $this->payments();
+        $payments = $this->payments()->get();
         foreach ($payments as $payment) {
+            $currency = $payment->currency;
             $amount += $payment->amount;
         }
         return $amount;
