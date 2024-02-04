@@ -39,6 +39,8 @@ class TransactionResource extends Resource
                             ->label('Third party')
                             ->relationship('iou', 'name')
                             ->native(false)
+                            ->searchable()
+                            ->preload()
                             ->createOptionForm([
                                 Forms\Components\TextInput::make('name')
                                     ->required(),
@@ -47,6 +49,8 @@ class TransactionResource extends Resource
                         Forms\Components\Select::make('category_id')
                             ->relationship('category', 'name')
                             ->native(false)
+                            ->searchable()
+                            ->preload()
                             ->createOptionForm([
                                 Forms\Components\TextInput::make('name')
                                     ->required(),
@@ -56,6 +60,7 @@ class TransactionResource extends Resource
                             ->required(),
                         Forms\Components\Select::make('type')
                             ->default('out')
+                            ->native(false)
                             ->options([
                                 'in' => 'Into the wallet',
                                 'out' => 'Out of the wallet',
