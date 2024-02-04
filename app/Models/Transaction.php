@@ -44,15 +44,22 @@ class Transaction extends Model
         return null;
     }
 
-    public function getAmountAttribute()
+    public function getAmountAttribute(): string
     {
-        $amount = 0;
+        $string = "";
+        $amounts = [];
         $payments = $this->payments()->get();
         foreach ($payments as $payment) {
-            $currency = $payment->currency;
-            $amount += $payment->amount;
+            $currency = $payment->balance()->first()->currency;
+            $currency = Currency::where("name", $currency)->pluck('symbol')->first();
+            if(!isset($amounts[$currency]))
+                $amounts[$currency] = 0;
+            $amounts[$currency] += $payment->amount;
         }
-        return $amount;
+        foreach ($amounts as $currency => $amount) {
+            $string = number_format($amount) . $currency . ", ";
+        }
+        return rtrim($string, ", ");
     }
 
     protected static function booted(): void
