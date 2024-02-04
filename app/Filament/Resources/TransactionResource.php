@@ -111,6 +111,8 @@ class TransactionResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('type')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('amount')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

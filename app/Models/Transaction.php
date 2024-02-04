@@ -26,7 +26,8 @@ class Transaction extends Model
 	];
 
     protected $appends = [
-        'currency'
+        'currency',
+        'amount'
     ];
 
 	protected $fillable = [
@@ -41,6 +42,16 @@ class Transaction extends Model
     public function getCurrencyAttribute()
     {
         return null;
+    }
+
+    public function getAmountAttribute()
+    {
+        $amount = 0;
+        $payments = $this->payments();
+        foreach ($payments as $payment) {
+            $amount += $payment->amount;
+        }
+        return $amount;
     }
 
     protected static function booted(): void
