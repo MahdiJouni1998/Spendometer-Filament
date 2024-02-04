@@ -58,11 +58,6 @@ class Transaction extends Model
 		return $this->belongsTo(Iou::class);
 	}
 
-    public function balance(): BelongsTo
-    {
-        return $this->belongsTo(Balance::class);
-    }
-
     public function cashBacks(): HasMany
     {
         return $this->hasMany(CashBack::class);
