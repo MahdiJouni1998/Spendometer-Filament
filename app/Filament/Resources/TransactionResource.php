@@ -99,6 +99,7 @@ class TransactionResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('iou.name')
+                    ->label('Third party')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('category.name')
