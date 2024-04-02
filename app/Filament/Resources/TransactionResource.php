@@ -82,6 +82,7 @@ class TransactionResource extends Resource
                             ->columnSpanFull()
                             ->columns(2)
                             ->relationship('payments')
+                            ->addActionLabel('Add a payment to current transaction')
                             ->mutateRelationshipDataBeforeCreateUsing(function (array $data, Get $get) {
                                 $type = $get('type');
                                 $amount = $data['amount'];
