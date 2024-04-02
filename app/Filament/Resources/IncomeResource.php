@@ -74,6 +74,7 @@ class IncomeResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('date_received', 'desc')
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
