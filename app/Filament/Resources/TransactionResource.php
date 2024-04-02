@@ -116,11 +116,9 @@ class TransactionResource extends Resource
                 Tables\Columns\TextColumn::make('date')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('type')
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('type'),
                 Tables\Columns\TextColumn::make('amount')
-                    ->toggleable()
-                    ->searchable(),
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -137,6 +135,16 @@ class TransactionResource extends Resource
             ->defaultSort('date', 'desc')
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                Tables\Filters\SelectFilter::make('Third party')
+                    ->searchable()
+                    ->relationship('iou', 'name'),
+                Tables\Filters\SelectFilter::make('Category')
+                    ->searchable()
+                    ->relationship('category', 'name'),
+                Tables\Filters\SelectFilter::make('type')
+                    ->options([
+                        'in', 'out'
+                    ]),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
