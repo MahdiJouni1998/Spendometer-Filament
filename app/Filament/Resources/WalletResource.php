@@ -73,6 +73,10 @@ class WalletResource extends Resource
                             ->deleteAction(fn (Action $action) => $action->requiresConfirmation())
                             ->columns(2)
                             ->columnSpanFull()
+                            ->mutateRelationshipDataBeforeCreateUsing(function ($data) {
+                                $data['user_id'] = auth()->user()->id;
+                                return $data;
+                            })
                     ])
                     ->columns(2)
             ]);
