@@ -18,6 +18,7 @@ class IouResource extends Resource
     protected static ?string $model = Iou::class;
 
     protected static ?string $navigationIcon = 'fas-people-group';
+    protected static ?string $navigationGroup = 'Transaction details';
     protected static ?string $label = 'third party';
 
     public static function form(Form $form): Form

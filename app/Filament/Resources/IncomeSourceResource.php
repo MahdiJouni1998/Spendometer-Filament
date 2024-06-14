@@ -20,6 +20,7 @@ class IncomeSourceResource extends Resource
     protected static ?string $model = IncomeSource::class;
 
     protected static ?string $navigationIcon = 'fas-circle-dollar-to-slot';
+    protected static ?string $navigationGroup = 'Income';
 
     public static function form(Form $form): Form
     {

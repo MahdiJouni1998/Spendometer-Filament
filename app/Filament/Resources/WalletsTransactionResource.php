@@ -20,6 +20,7 @@ class WalletsTransactionResource extends Resource
     protected static ?string $model = WalletsTransaction::class;
 
     protected static ?string $navigationIcon = 'heroicon-s-wallet';
+    protected static ?string $navigationGroup = 'Transactions';
 
     public static function form(Form $form): Form
     {

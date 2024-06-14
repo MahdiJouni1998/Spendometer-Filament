@@ -20,6 +20,7 @@ class IncomeResource extends Resource
     protected static ?string $model = Income::class;
 
     protected static ?string $navigationIcon = 'fas-money-check-dollar';
+    protected static ?string $navigationGroup = 'Income';
 
     public static function form(Form $form): Form
     {
