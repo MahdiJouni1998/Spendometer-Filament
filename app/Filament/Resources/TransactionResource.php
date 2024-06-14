@@ -21,7 +21,6 @@ use function Filament\Support\format_number;
 class TransactionResource extends Resource
 {
     protected static ?string $model = Transaction::class;
-    protected static ?string $navigationGroup = 'Transactions';
 
     protected static ?string $navigationIcon = 'fas-file-invoice-dollar';
     protected static ?string $navigationGroup = 'Transactions';
