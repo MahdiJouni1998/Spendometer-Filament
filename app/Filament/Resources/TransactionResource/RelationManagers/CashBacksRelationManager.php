@@ -48,6 +48,9 @@ class CashBacksRelationManager extends RelationManager
                     ->mutateFormDataUsing(function (array $data) {
                         $amount = $data['amount'];
                         $balance = Balance::findOrFail($data['balance_id']);
+                        $type = $this->getOwnerRecord()->type;
+                        if($type == "in")
+                            $amount = -$amount;
                         $balance->amount += $amount;
                         $balance->save();
                         return $data;
