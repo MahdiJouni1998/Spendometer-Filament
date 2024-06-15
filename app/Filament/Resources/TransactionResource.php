@@ -157,7 +157,10 @@ class TransactionResource extends Resource
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->recordUrl(
+                fn(Model $record): string => Pages\EditTransaction::getUrl([$record->id]),
+            );
     }
 
     public static function getRelations(): array

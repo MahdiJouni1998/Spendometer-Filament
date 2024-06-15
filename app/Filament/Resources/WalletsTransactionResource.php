@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\WalletsTransactionResource\Pages;
-use App\Filament\Resources\WalletsTransactionResource\RelationManagers;
 use App\Models\WalletsTransaction;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -92,10 +91,10 @@ class WalletsTransactionResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('amount_from')
-                    ->money(fn (Model $record) => $record->currency_from)
+                    ->money(fn(Model $record) => $record->currency_from)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('amount_to')
-                    ->money(fn (Model $record) => $record->currency_to)
+                    ->money(fn(Model $record) => $record->currency_to)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -124,6 +123,9 @@ class WalletsTransactionResource extends Resource
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ])
+            ->recordUrl(
+                fn(Model $record): string => Pages\EditWalletsTransaction::getUrl([$record->id]),
+            )
             ->defaultSort('date', 'desc');
     }
 
