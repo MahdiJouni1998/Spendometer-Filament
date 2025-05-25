@@ -6,6 +6,7 @@ use App\Filament\Resources\TransactionResource\Pages;
 use App\Filament\Resources\TransactionResource\RelationManagers;
 use App\Models\Balance;
 use App\Models\Category;
+use App\Models\RecurringPayment;
 use App\Models\Transaction;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -97,6 +98,29 @@ class TransactionResource extends Resource
                         Forms\Components\Textarea::make('description')
                             ->maxLength(65535)
                             ->columnSpanFull(),
+                        Forms\Components\Grid::make(3)
+                            ->schema([
+                                Forms\Components\Checkbox::make('is_recurring')
+                                    ->visibleOn(['create', 'view'])
+                                    ->live()
+                                    ->label('Is this a recurring payment?'),
+                                Forms\Components\Group::make([
+                                    Forms\Components\Select::make('recurring_payment_id')
+                                        ->options(RecurringPayment::all()->pluck('name', 'id'))
+                                        ->label('Which one?')
+                                        ->required(function ($get) {
+                                            return $get('is_recurring');
+                                        }),
+                                ])
+                                    ->visible(function ($operation, $get) {
+                                        return $operation == 'create' && $get('is_recurring');
+                                    })
+                                    ->relationship('recurringPaymentsLog')
+                                    ->mutateRelationshipDataBeforeCreateUsing(function (array $data, Get $get) {
+                                        $data['payment_date'] = $get('date');
+                                        return $data;
+                                    })
+                            ])
                     ])
             ]);
     }

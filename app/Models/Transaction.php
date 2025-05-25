@@ -22,7 +22,8 @@ class Transaction extends Model
 	protected $casts = [
 		'date' => 'datetime',
 		'iou_id' => 'int',
-		'category_id' => 'int'
+		'category_id' => 'int',
+        'is_recurring' => 'bool',
 	];
 
     protected $appends = [
@@ -37,6 +38,7 @@ class Transaction extends Model
 		'description',
 		'iou_id',
 		'category_id',
+        'is_recurring',
 	];
 
     public function getCurrencyAttribute()
@@ -57,7 +59,7 @@ class Transaction extends Model
             $amounts[$currency] += $payment->amount;
         }
         foreach ($amounts as $currency => $amount) {
-            $string = number_format($amount) . $currency . ", ";
+            $string .= number_format($amount) . $currency . ", ";
         }
         return rtrim($string, ", ");
     }
@@ -85,5 +87,10 @@ class Transaction extends Model
     public function payments(): HasMany
     {
         return $this->hasMany(TransactionPayment::class);
+    }
+
+    public function recurringPaymentsLog(): HasOne
+    {
+        return $this->hasOne(RecurringPaymentsLog::class);
     }
 }

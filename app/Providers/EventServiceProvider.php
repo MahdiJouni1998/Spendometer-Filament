@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Balance;
 use App\Models\Currency;
+use App\Models\RecurringPayment;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -34,6 +35,7 @@ class EventServiceProvider extends ServiceProvider
         Transaction::class => [CreateForUserObserver::class],
         IncomeSource::class => [CreateForUserObserver::class],
         WalletsTransaction::class => [CreateForUserObserver::class],
+        RecurringPayment::class => [CreateForUserObserver::class],
     ];
     /**
      * The event to listener mappings for the application.
