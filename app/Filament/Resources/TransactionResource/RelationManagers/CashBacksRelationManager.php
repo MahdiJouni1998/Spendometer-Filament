@@ -38,7 +38,8 @@ class CashBacksRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('balance.name'),
                 Tables\Columns\TextColumn::make('amount')
-                    ->money(fn (Model $record) => $record->balance->currency)
+                    ->formatStateUsing(fn ($record) => money($record->amount * 100,
+                        $record->balance->currency)->formatWithoutZeroes())
             ])
             ->filters([
                 //

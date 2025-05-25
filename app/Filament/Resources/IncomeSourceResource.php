@@ -66,7 +66,8 @@ class IncomeSourceResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('amount')
-                    ->money(fn (Model $record) => $record->currency)
+                    ->formatStateUsing(fn ($record) => money($record->amount * 100,
+                        $record->currency)->formatWithoutZeroes())
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

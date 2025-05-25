@@ -58,6 +58,7 @@ class Transaction extends Model
                 $amounts[$currency] = 0;
             $amounts[$currency] += $payment->amount;
         }
+        ksort($amounts);
         foreach ($amounts as $currency => $amount) {
             $string .= number_format($amount) . $currency . ", ";
         }

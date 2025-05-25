@@ -12,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class RecurringPaymentResource extends Resource
 {
@@ -97,14 +98,15 @@ class RecurringPaymentResource extends Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('recurring_amount')
-                    ->money(fn ($record) => $record->currency)
+                    ->formatStateUsing(function ($record) {
+                        return money($record->recurring_amount * 100, $record->currency)->formatWithoutZeroes()
+                            . " per " . $record->cycle_count . " " .
+                            Str::plural($record->cycle_type, $record->cycle_count);
+                    })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('total_amount')
-                    ->money(fn ($record) => $record->currency)
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('cycle_count')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('cycle_type')
+                    ->formatStateUsing(fn ($record) => money($record->total_amount * 100,
+                        $record->currency)->formatWithoutZeroes())
                     ->searchable(),
                 Tables\Columns\TextColumn::make('start_date')
                     ->date()

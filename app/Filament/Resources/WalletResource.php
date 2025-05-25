@@ -101,9 +101,8 @@ class WalletResource extends Resource
                     }
                     $state = $amount != 0 ? (string) $amount : "";
 //                    dd($record);
-                    return $state;
+                    return money($state * 100, $currency)->formatWithoutZeroes();
                 })
-                ->money($currency)
                 ->searchable();
         }
         $columns[] = Tables\Columns\TextColumn::make('created_at')

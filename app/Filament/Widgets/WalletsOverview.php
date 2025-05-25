@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use Akaunting\Money\Currency;
 use App\Models\Wallet;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -15,7 +16,8 @@ class WalletsOverview extends BaseWidget
         $stats = [];
         foreach ($wallets as $wallet) {
             foreach ($wallet->balances()->get() as $balance) {
-                $amount = format_money($balance->amount, $balance->currency);
+                $c = $balance->currency;
+                $amount = money($balance->amount * 100, $c)->formatWithoutZeroes();
                 $stats[] = Stat::make($balance->name, $amount);
             }
         }

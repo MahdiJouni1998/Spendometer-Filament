@@ -91,10 +91,12 @@ class WalletsTransactionResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('amount_from')
-                    ->money(fn(Model $record) => $record->currency_from)
+                    ->formatStateUsing(fn ($record) => money($record->amount_from * 100,
+                        $record->currency_from)->formatWithoutZeroes())
                     ->sortable(),
                 Tables\Columns\TextColumn::make('amount_to')
-                    ->money(fn(Model $record) => $record->currency_to)
+                    ->formatStateUsing(fn ($record) => money($record->amount_to * 100,
+                        $record->currency_to)->formatWithoutZeroes())
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
