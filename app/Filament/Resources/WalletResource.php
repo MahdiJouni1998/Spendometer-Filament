@@ -99,9 +99,8 @@ class WalletResource extends Resource
                     foreach ($balances as $balance) {
                         $amount += $balance->amount;
                     }
-                    $state = $amount != 0 ? (string) $amount : "";
-//                    dd($record);
-                    return money($state * 100, $currency)->formatWithoutZeroes();
+//                    $state = $amount != 0 ? (string) $amount : "";
+                    return money($amount * 100, $currency)->formatWithoutZeroes();
                 })
                 ->searchable();
         }
