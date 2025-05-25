@@ -96,13 +96,21 @@ class RecurringPaymentResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('name')
+                Tables\Columns\TextColumn::make('recurring_amount')
+                    ->money(fn ($record) => $record->currency)
                     ->searchable(),
-                Tables\Columns\TextColumn::make('name')
+                Tables\Columns\TextColumn::make('total_amount')
+                    ->money(fn ($record) => $record->currency)
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('cycle_count')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('cycle_type')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('start_date')
+                    ->date()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('end_date')
+                    ->date()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
