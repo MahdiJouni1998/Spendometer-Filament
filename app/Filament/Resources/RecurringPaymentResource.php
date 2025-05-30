@@ -33,8 +33,14 @@ class RecurringPaymentResource extends Resource
                             ->required()
                             ->maxLength(255),
                         Forms\Components\Grid::make()
-                            ->columnSpan(1)
-                            ->columns(2)
+                            ->columnSpan([
+                                'lg' => 1,
+                                'xs' => 1,
+                            ])
+                            ->columns([
+                                'sm' => 2,
+                                'xs' => 1,
+                            ])
                             ->schema([
                                 Forms\Components\DatePicker::make('start_date')
                                     ->nullable(),
