@@ -27,17 +27,20 @@ class RecurringPaymentResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Section::make()
-                    ->columns(2)
+                    ->columns([
+                        'sm' => 2,
+                        'xs' => 1
+                    ])
+                    ->columnSpanFull()
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->required()
+                            ->columnSpan(1)
                             ->maxLength(255),
                         Forms\Components\Grid::make()
-                            ->columnSpan([
-                                'lg' => 1,
-                                'xs' => 1,
-                            ])
+                            ->columnSpan(1)
                             ->columns([
+                                'md' => 2,
                                 'sm' => 2,
                                 'xs' => 1,
                             ])
@@ -48,8 +51,14 @@ class RecurringPaymentResource extends Resource
                                     ->nullable(),
                             ]),
                         Forms\Components\Grid::make()
-                            ->columnSpan(2)
-                            ->columns(4)
+                            ->columnSpanFull()
+                            ->columns([
+                                'xl' => 4,
+                                'lg' => 3,
+                                'md' => 3,
+                                'sm' => 2,
+                                'xs' => 1
+                            ])
                             ->schema([
                                 Forms\Components\TextInput::make('recurring_amount')
                                     ->currencyMask()
@@ -74,25 +83,20 @@ class RecurringPaymentResource extends Resource
                                         Forms\Components\TextInput::make('name')
                                             ->required(),
                                     ]),
-                                Forms\Components\Grid::make()
-                                    ->columnSpan(1)
-                                    ->columns(2)
-                                    ->schema([
-                                        Forms\Components\TextInput::make('cycle_count')
-                                            ->numeric()
-                                            ->default(1)
-                                            ->required(),
-                                        Forms\Components\Select::make('cycle_type')
-                                            ->default('month')
-                                            ->native(false)
-                                            ->options([
-                                                'day' => 'Daily',
-                                                'week' => 'Weekly',
-                                                'month' => 'Monthly',
-                                                'year' => 'Yearly',
-                                            ])
-                                            ->required(),
-                                    ]),
+                                    Forms\Components\TextInput::make('cycle_count')
+                                        ->numeric()
+                                        ->default(1)
+                                        ->required(),
+                                    Forms\Components\Select::make('cycle_type')
+                                        ->default('month')
+                                        ->native(false)
+                                        ->options([
+                                            'day' => 'Daily',
+                                            'week' => 'Weekly',
+                                            'month' => 'Monthly',
+                                            'year' => 'Yearly',
+                                        ])
+                                        ->required(),
                                 Forms\Components\Radio::make('status')
                                     ->options([
                                         'active' => 'Active',
@@ -102,7 +106,10 @@ class RecurringPaymentResource extends Resource
                                     ->required()
                                     ->inline()
                                     ->inlineLabel(false)
-                                    ->columnSpan(2),
+                                    ->columnSpan([
+                                        'sm' => 2,
+                                        'xs' => 1
+                                    ]),
                             ]),
                         Forms\Components\Textarea::make('details')
                             ->maxLength(65535)
