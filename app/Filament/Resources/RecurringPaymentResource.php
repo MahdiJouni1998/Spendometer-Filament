@@ -33,14 +33,8 @@ class RecurringPaymentResource extends Resource
                             ->required()
                             ->maxLength(255),
                         Forms\Components\Grid::make()
-                            ->columnSpan([
-                                'lg' => 1,
-                                'xs' => 1,
-                            ])
-                            ->columns([
-                                'sm' => 2,
-                                'xs' => 1,
-                            ])
+                            ->columnSpan(1)
+                            ->columns(2)
                             ->schema([
                                 Forms\Components\DatePicker::make('start_date')
                                     ->nullable(),
@@ -48,14 +42,8 @@ class RecurringPaymentResource extends Resource
                                     ->nullable(),
                             ]),
                         Forms\Components\Grid::make()
-                            ->columnSpan([
-                                'lg' => 2,
-                                'sm' => 1
-                            ])
-                            ->columns([
-                                'lg' => 4,
-                                'sm' => 2
-                            ])
+                            ->columnSpan(2)
+                            ->columns(4)
                             ->schema([
                                 Forms\Components\TextInput::make('recurring_amount')
                                     ->currencyMask()
