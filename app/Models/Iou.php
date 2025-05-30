@@ -31,4 +31,9 @@ class Iou extends Model
 	{
 		return $this->hasMany(Transaction::class);
 	}
+
+    public function recurringPayments(): HasMany
+    {
+        return $this->hasMany(RecurringPayment::class);
+    }
 }

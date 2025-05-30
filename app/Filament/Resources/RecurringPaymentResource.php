@@ -48,8 +48,14 @@ class RecurringPaymentResource extends Resource
                                     ->nullable(),
                             ]),
                         Forms\Components\Grid::make()
-                            ->columnSpan(2)
-                            ->columns(4)
+                            ->columnSpan([
+                                'lg' => 2,
+                                'sm' => 1
+                            ])
+                            ->columns([
+                                'lg' => 4,
+                                'sm' => 2
+                            ])
                             ->schema([
                                 Forms\Components\TextInput::make('recurring_amount')
                                     ->currencyMask()
@@ -64,6 +70,16 @@ class RecurringPaymentResource extends Resource
                                     ->required()
                                     ->live()
                                     ->options($currencies),
+                                Forms\Components\Select::make('iou_id')
+                                    ->label('Third party')
+                                    ->relationship('iou', 'name')
+                                    ->native(false)
+                                    ->searchable()
+                                    ->preload()
+                                    ->createOptionForm([
+                                        Forms\Components\TextInput::make('name')
+                                            ->required(),
+                                    ]),
                                 Forms\Components\Grid::make()
                                     ->columnSpan(1)
                                     ->columns(2)
@@ -83,6 +99,16 @@ class RecurringPaymentResource extends Resource
                                             ])
                                             ->required(),
                                     ]),
+                                Forms\Components\Radio::make('status')
+                                    ->options([
+                                        'active' => 'Active',
+                                        'cancelled' => 'Cancelled',
+                                        'complete' => 'Complete'
+                                    ])
+                                    ->required()
+                                    ->inline()
+                                    ->inlineLabel(false)
+                                    ->columnSpan(2),
                             ]),
                         Forms\Components\Textarea::make('details')
                             ->maxLength(65535)

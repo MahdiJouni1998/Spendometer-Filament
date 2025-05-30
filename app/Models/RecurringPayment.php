@@ -20,7 +20,8 @@ class RecurringPayment extends Model
 	protected $table = 'recurring_payments';
 
 	protected $casts = [
-		'user_id' => 'int',
+        'user_id' => 'int',
+        'iou_id' => 'int',
 		'recurring_amount' => 'float',
 		'total_amount' => 'float',
 		'cycle_count' => 'float',
@@ -29,7 +30,8 @@ class RecurringPayment extends Model
 	];
 
 	protected $fillable = [
-		'user_id',
+        'user_id',
+        'iou_id',
 		'name',
 		'recurring_amount',
 		'total_amount',
@@ -39,6 +41,7 @@ class RecurringPayment extends Model
 		'cycle_count',
         'start_date',
         'end_date',
+        'status'
 	];
 
     protected static function booted(): void
@@ -55,4 +58,9 @@ class RecurringPayment extends Model
 	{
 		return $this->hasMany(RecurringPaymentsLog::class);
 	}
+
+    public function iou(): BelongsTo
+    {
+        return $this->belongsTo(Iou::class);
+    }
 }
