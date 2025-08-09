@@ -12,6 +12,17 @@ return [
 
     'currencies' => [
 
+        'GOLD' => [
+            'name'                => 'Grams of gold',
+            'code'                => 9999,
+            'precision'           => 2,
+            'subunit'             => 100,
+            'symbol'              => 'g Au',
+            'symbol_first'        => false,
+            'decimal_mark'        => '.',
+            'thousands_separator' => ',',
+        ],
+
         'AED' => [
             'name'                => 'UAE Dirham',
             'code'                => 784,
