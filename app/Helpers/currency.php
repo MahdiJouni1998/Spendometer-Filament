@@ -18,7 +18,9 @@ function getAllCurrenciesSymbols(): array
     $all_currencies = \Akaunting\Money\Currency::getCurrencies();
 //    dd($all_currencies);
     foreach ($all_currencies as $currency => $details) {
-        $currencies[strtolower($currency)] = $details['symbol'];
+        $currency_lower = strtolower($currency);
+        if($currency_lower == 'ils') continue;
+        $currencies[$currency_lower] = $details['symbol'];
     }
     return $currencies;
 }
@@ -29,7 +31,9 @@ function getAllCurrenciesNames(): array
     $all_currencies = \Akaunting\Money\Currency::getCurrencies();
 //    dd($all_currencies);
     foreach ($all_currencies as $currency => $details) {
-        $currencies[strtolower($currency)] = $currency;
+        $currency_lower = strtolower($currency);
+        if($currency_lower == 'ils') continue;
+        $currencies[$currency_lower] = $currency;
     }
     return $currencies;
 }
