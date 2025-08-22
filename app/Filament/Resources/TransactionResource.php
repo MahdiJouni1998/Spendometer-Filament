@@ -49,7 +49,11 @@ class TransactionResource extends Resource
                             ])
                             ->required(),
                         Forms\Components\Select::make('category_id')
-                            ->relationship('category', 'name')
+                            ->relationship(
+                                'category',
+                                'name',
+                                fn(Builder $query) => $query->orderBy('sorting')
+                            )
                             ->native(false)
                             ->searchable()
                             ->preload()
@@ -88,7 +92,7 @@ class TransactionResource extends Resource
                             ->mutateRelationshipDataBeforeCreateUsing(function (array $data, Get $get) {
                                 $type = $get('type');
                                 $amount = $data['amount'];
-                                if($type == "out")
+                                if ($type == "out")
                                     $amount = -$amount;
                                 $balance = Balance::findOrFail($data['balance_id']);
                                 $balance->amount += $amount;
@@ -168,7 +172,8 @@ class TransactionResource extends Resource
                     ->relationship('category', 'name'),
                 Tables\Filters\SelectFilter::make('type')
                     ->options([
-                        'in', 'out'
+                        'in',
+                        'out'
                     ]),
             ])
             ->actions([
